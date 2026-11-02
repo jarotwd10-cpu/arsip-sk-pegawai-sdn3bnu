@@ -1,0 +1,556 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Arsip SK Pegawai SDN 3 BNU</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: dark teal masthead, summary strip, one wide register table with row-level due-date status, modal form for entry. */
+:root{
+  --bg:#F3F5F7; --surface:#FFFFFF; --surface-2:#F7F9FA; --ink:#16212C; --ink-2:#4B5A68; --line:#DCE2E8;
+  --accent:#0B6B5D; --accent-ink:#FFFFFF; --accent-soft:#E1F1EE; --hdr:#0B3B36; --hdr-ink:#EAF5F3; --hdr-dim:#9CC4BD;
+  --ok:#1B7A45; --ok-soft:#E2F3E8; --warn:#9A6200; --warn-soft:#FFF1D6; --bad:#B3261E; --bad-soft:#FDE7E5;
+  --shadow:0 1px 2px rgba(20,33,44,.06),0 8px 24px rgba(20,33,44,.08);
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1519; --surface:#172027; --surface-2:#1B262E; --ink:#E6ECF1; --ink-2:#9FB0BD; --line:#2A3844;
+  --accent:#3CC1AB; --accent-ink:#06211C; --accent-soft:#12332D; --hdr:#0A1F25; --hdr-ink:#E6F3F1; --hdr-dim:#7FA8A1;
+  --ok:#5AC98A; --ok-soft:#12301F; --warn:#F0B84A; --warn-soft:#3A2C0D; --bad:#FF8A80; --bad-soft:#3C1715;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1519; --surface:#172027; --surface-2:#1B262E; --ink:#E6ECF1; --ink-2:#9FB0BD; --line:#2A3844;
+  --accent:#3CC1AB; --accent-ink:#06211C; --accent-soft:#12332D; --hdr:#0A1F25; --hdr-ink:#E6F3F1; --hdr-dim:#7FA8A1;
+  --ok:#5AC98A; --ok-soft:#12301F; --warn:#F0B84A; --warn-soft:#3A2C0D; --bad:#FF8A80; --bad-soft:#3C1715;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.4); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;
+  padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px))}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* masthead */
+.mast{background:var(--hdr);color:var(--hdr-ink)}
+.mast .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:18px}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.mono-badge{width:42px;height:42px;border-radius:6px;background:var(--hdr-ink);color:var(--hdr);display:grid;place-items:center;
+  font:600 15px var(--mono);letter-spacing:.02em;flex:none}
+.brand h1{margin:0;font-size:19px;font-weight:600;letter-spacing:-.005em;text-wrap:balance}
+.brand p{margin:0;color:var(--hdr-dim);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.asof{font:400 12.5px var(--mono);color:var(--hdr-dim)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
+.stat .k{font-size:12px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em}
+.stat .v{font:500 28px/1.2 var(--mono);margin-top:4px;font-variant-numeric:tabular-nums}
+.stat .s{font-size:12.5px;color:var(--ink-2);margin-top:2px}
+.stat.alert .v{color:var(--bad)}
+.stat.alert.zero .v{color:var(--ok)}
+
+/* toolbar */
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:20px}
+.search{position:relative;flex:1 1 260px;min-width:0}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink-2);pointer-events:none}
+.search input{width:100%;height:40px;padding:0 12px 0 36px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:6px;
+  background:var(--surface);cursor:pointer;font-weight:500;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:16px;background:var(--surface);cursor:pointer;color:var(--ink-2);font-size:13px}
+.chip b{font:500 12px var(--mono);margin-left:6px;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.chip[aria-pressed="true"] b{color:var(--accent)}
+
+/* table */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-top:14px;overflow:hidden}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:1080px}
+th{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2);text-align:left;
+  padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:var(--surface-2)}
+td.no{font:400 13px var(--mono);color:var(--ink-2);width:52px;font-variant-numeric:tabular-nums}
+.nm{font-weight:600}
+.nip{font:400 12.5px var(--mono);color:var(--ink-2);margin-top:2px;letter-spacing:.01em}
+.sk .nomor{font:500 13px var(--mono);word-break:break-word}
+.sk .nomor.empty{color:var(--ink-2);font-family:var(--sans);font-weight:400}
+.sk .meta{color:var(--ink-2);font-size:12.5px;margin-top:2px}
+.sk .meta b{font-weight:500;color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:11px;font-size:12px;font-weight:500;white-space:nowrap;text-decoration:none}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.mute{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+a.pill.ok:hover{text-decoration:underline}
+.sk .pdf{margin-top:6px}
+.due{display:grid;gap:8px}
+.due .row{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.due .lb{font:500 11.5px var(--mono);color:var(--ink-2);width:30px}
+.due .dt{font-size:13px;font-variant-numeric:tabular-nums}
+.acts{display:flex;gap:4px;white-space:nowrap}
+.ib{width:32px;height:32px;display:grid;place-items:center;border:1px solid transparent;border-radius:6px;background:none;cursor:pointer;color:var(--ink-2)}
+.ib:hover{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+.ib.del:hover{color:var(--bad)}
+
+.state{padding:48px 20px;text-align:center;color:var(--ink-2)}
+.state h2{margin:0 0 6px;font-size:17px;color:var(--ink);font-weight:600}
+.state p{margin:0 auto 16px;max-width:46ch}
+.state .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.skel{height:16px;border-radius:4px;background:var(--line);opacity:.6;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+.note{font-size:12.5px;color:var(--ink-2);margin:14px 0 32px;max-width:90ch}
+
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(8,16,22,.55);display:flex;align-items:flex-start;justify-content:center;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));overflow-y:auto;z-index:50}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);width:100%;max-width:760px;margin:auto}
+.panel.sm{max-width:440px}
+.ph{padding:18px 22px 0}
+.ph h2{margin:0;font-size:18px;font-weight:600}
+.ph p{margin:2px 0 0;color:var(--ink-2);font-size:13px}
+.pb{padding:16px 22px;display:grid;gap:16px}
+.pf{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;align-items:center}
+.pf .msg{margin-right:auto;color:var(--bad);font-size:13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f{display:grid;gap:5px;min-width:0}
+.f.full{grid-column:1/-1}
+.f label{font-size:12.5px;font-weight:500;color:var(--ink-2)}
+.f input:not([type=file]){height:40px;padding:0 11px;border:1px solid var(--line);border-radius:6px;background:var(--surface);width:100%;min-width:0}
+.f input:disabled{opacity:.6}
+.f .hint{font-size:12px;color:var(--ink-2)}
+fieldset.grp{border:1px solid var(--line);border-radius:8px;padding:14px;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:0}
+fieldset.grp legend{padding:0 6px;font-weight:600;font-size:13px;color:var(--accent)}
+.filebox{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px dashed var(--line);border-radius:6px;padding:8px 10px;background:var(--surface-2)}
+.filebox .fn{flex:1 1 140px;min-width:0;overflow-wrap:anywhere;font-size:13px}
+.filebox input[type=file]{max-width:100%;font-size:12.5px}
+.link{background:none;border:0;color:var(--bad);cursor:pointer;padding:2px 4px;font-size:12.5px;text-decoration:underline}
+.prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:10px}
+.prog i{display:block;height:100%;background:var(--accent);width:0}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);
+  padding:10px 16px;border-radius:6px;font-size:13.5px;z-index:80;max-width:calc(100% - 32px);box-shadow:var(--shadow)}
+.banner{margin-top:16px;padding:12px 14px;border-radius:8px;background:var(--bad-soft);color:var(--bad);font-size:13.5px}
+.banner.info{background:var(--warn-soft);color:var(--warn)}
+
+@media (max-width:860px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){
+  .grid2,fieldset.grp{grid-template-columns:1fr}
+  .btn .t{display:none}
+  .btn{padding:0 12px}
+  .btn.primary .t{display:inline}
+  .pb,.ph,.pf{padding-left:16px;padding-right:16px}
+}
+@media (prefers-reduced-motion:reduce){.skel{animation:none}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="brand">
+      <div class="mono-badge" aria-hidden="true">SK</div>
+      <div>
+        <h1>Arsip SK Pegawai</h1>
+        <p>SDN 3 BNU</p>
+      </div>
+    </div>
+    <div class="asof" id="asof"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="stats" id="stats" aria-label="Ringkasan"></section>
+
+  <div id="banner"></div>
+
+  <div class="bar">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Cari nama, NIP, atau nomor SK" aria-label="Cari pegawai" autocomplete="off">
+    </div>
+    <button class="btn" data-act="import" id="btn-import" title="Impor dari Excel">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L7 8m5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg><span class="t">Impor Excel</span></button>
+    <button class="btn" data-act="export" title="Ekspor ke Excel">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg><span class="t">Ekspor Excel</span></button>
+    <button class="btn primary" data-act="add" id="btn-add">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="t">Tambah pegawai</span></button>
+    <input type="file" id="importfile" accept=".xlsx,.xls,.csv" hidden>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <div class="card"><div class="scroll" id="tablewrap"></div></div>
+
+  <p class="note">Jadwal berikutnya dihitung dari TMT SK terakhir: kenaikan pangkat 4 tahun (KP) dan kenaikan gaji berkala 2 tahun (KGB). Status "Segera" muncul 90 hari sebelum jatuh tempo. Sesuaikan dengan ketentuan yang berlaku untuk masing-masing pegawai.</p>
+</main>
+
+<div id="modal"></div>
+<div id="toast" class="toast" role="status" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(function(){
+'use strict';
+const $ = s => document.querySelector(s);
+const state = {rows:[], loaded:false, error:null, q:'', filter:'all', db:null, assets:null, dl:null, canWrite:true, busy:false};
+const MON = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const KINDS = [['pangkat','SK Pangkat'],['berkala','SK Berkala']];
+const ICON = {
+  edit:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+  del:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 11v5m4-5v5"/></svg>',
+  file:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Zm0 0v5h5"/></svg>'
+};
+
+/* ---------- helpers ---------- */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const iso = (y,m,d) => `${y}-${pad(m)}-${pad(d)}`;
+function parseISO(s){ const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s||''); return m ? {y:+m[1],m:+m[2],d:+m[3]} : null; }
+function fmt(s){ const p = parseISO(s); return p ? `${pad(p.d)} ${MON[p.m-1]} ${p.y}` : ''; }
+function fmtNum(s){ const p = parseISO(s); return p ? `${pad(p.d)}-${pad(p.m)}-${p.y}` : ''; }
+function addYears(s,n){ const p = parseISO(s); if(!p) return ''; let d = p.d; if(p.m===2 && d===29 && n%4) d = 28; return iso(p.y+n,p.m,d); }
+function today(){ const t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+function daysUntil(s){ const p = parseISO(s); return Math.round((new Date(p.y,p.m-1,p.d) - today())/864e5); }
+function validDate(y,m,d){ return y>1900 && y<2200 && m>=1 && m<=12 && d>=1 && d<=31; }
+const MONTHS = {januari:1,jan:1,februari:2,feb:2,pebruari:2,maret:3,mar:3,april:4,apr:4,mei:5,juni:6,jun:6,juli:7,jul:7,agustus:8,agu:8,agt:8,ags:8,september:9,sep:9,sept:9,oktober:10,okt:10,november:11,nov:11,nop:11,desember:12,des:12};
+function parseDate(v){
+  if(v===''||v==null) return '';
+  if(v instanceof Date) return iso(v.getFullYear(),v.getMonth()+1,v.getDate());
+  if(typeof v==='number'){ if(v>20000&&v<80000){ const d = new Date(Math.round((v-25569)*864e5)); return iso(d.getUTCFullYear(),d.getUTCMonth()+1,d.getUTCDate()); } return ''; }
+  const s = String(v).trim().toLowerCase(); let m;
+  if((m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s)) && validDate(+m[1],+m[2],+m[3])) return iso(+m[1],+m[2],+m[3]);
+  if((m = /^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/.exec(s)) && validDate(+m[3],+m[2],+m[1])) return iso(+m[3],+m[2],+m[1]);
+  if((m = /^(\d{1,2})\s+([a-z]+)\.?\s+(\d{4})$/.exec(s)) && MONTHS[m[2]] && validDate(+m[3],MONTHS[m[2]],+m[1])) return iso(+m[3],MONTHS[m[2]],+m[1]);
+  return '';
+}
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.hidden = false;
+  clearTimeout(toast.t); toast.t = setTimeout(()=>{ t.hidden = true; }, 3600);
+}
+const sk = (r,k) => Object.assign({nomor:'',tanggal:'',tmt:'',fileId:'',fileName:''}, r[k]||{});
+const complete = v => !!(v.nomor && v.tanggal && v.tmt && v.fileId);
+
+/* due-date status */
+function due(tmt, years){
+  if(!parseISO(tmt)) return null;
+  const date = addYears(tmt, years), days = daysUntil(date);
+  if(days < 0) return {date, cls:'bad', label:`Terlambat ${-days} hari`, days};
+  if(days <= 90) return {date, cls:'warn', label:`Segera, ${days} hari lagi`, days};
+  return {date, cls:'ok', label:'Aman', days};
+}
+function dues(r){ return {kp: due(sk(r,'pangkat').tmt,4), kgb: due(sk(r,'berkala').tmt,2)}; }
+const needsAttention = r => { const d = dues(r); return [d.kp,d.kgb].some(x => x && x.cls!=='ok'); };
+
+function sorted(){
+  return state.rows.slice().sort((a,b) => (a.urut ?? 1e9)-(b.urut ?? 1e9) || String(a.nama).localeCompare(String(b.nama),'id'));
+}
+function filtered(){
+  const q = state.q.trim().toLowerCase();
+  return sorted().map((r,i)=>({...r, _no:i+1})).filter(r=>{
+    if(q){
+      const hay = [r.nama,r.nip,sk(r,'pangkat').nomor,sk(r,'berkala').nomor].join(' ').toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    const p = sk(r,'pangkat'), b = sk(r,'berkala');
+    if(state.filter==='due') return needsAttention(r);
+    if(state.filter==='nopdf') return !p.fileId || !b.fileId;
+    if(state.filter==='incomplete') return !complete(p) || !complete(b);
+    return true;
+  });
+}
+
+/* ---------- render ---------- */
+function renderStats(){
+  const rows = state.rows, n = rows.length;
+  const p = rows.filter(r=>complete(sk(r,'pangkat'))).length;
+  const b = rows.filter(r=>complete(sk(r,'berkala'))).length;
+  const a = rows.filter(needsAttention).length;
+  const v = x => state.loaded ? x : '–';
+  $('#stats').innerHTML = `
+    <div class="stat"><div class="k">Total pegawai</div><div class="v">${v(n)}</div><div class="s">tercatat di arsip</div></div>
+    <div class="stat"><div class="k">SK Pangkat lengkap</div><div class="v">${v(p)}<span style="font-size:15px;color:var(--ink-2)"> / ${v(n)}</span></div><div class="s">data dan PDF terisi</div></div>
+    <div class="stat"><div class="k">SK Berkala lengkap</div><div class="v">${v(b)}<span style="font-size:15px;color:var(--ink-2)"> / ${v(n)}</span></div><div class="s">data dan PDF terisi</div></div>
+    <div class="stat alert ${a===0&&state.loaded?'zero':''}"><div class="k">Perlu perhatian</div><div class="v">${v(a)}</div><div class="s">jatuh tempo dalam 90 hari atau terlambat</div></div>`;
+}
+function renderChips(){
+  const rows = state.rows;
+  const c = {
+    all: rows.length,
+    due: rows.filter(needsAttention).length,
+    nopdf: rows.filter(r=>!sk(r,'pangkat').fileId || !sk(r,'berkala').fileId).length,
+    incomplete: rows.filter(r=>!complete(sk(r,'pangkat')) || !complete(sk(r,'berkala'))).length
+  };
+  const defs = [['all','Semua'],['due','Jatuh tempo'],['nopdf','PDF belum diunggah'],['incomplete','Data belum lengkap']];
+  $('#chips').innerHTML = defs.map(([k,l]) => `<button class="chip" data-act="filter" data-v="${k}" aria-pressed="${state.filter===k}">${l}<b>${c[k]}</b></button>`).join('');
+}
+function skCell(r,k){
+  const v = sk(r,k);
+  const nomor = v.nomor ? `<div class="nomor">${esc(v.nomor)}</div>` : `<div class="nomor empty">Nomor belum diisi</div>`;
+  const meta = (v.tanggal||v.tmt) ? `<div class="meta">Tgl <b>${fmt(v.tanggal)||'–'}</b> · TMT <b>${fmt(v.tmt)||'–'}</b></div>` : '';
+  const pdf = v.fileId
+    ? `<a class="pill ok" href="/_blob/${esc(v.fileId)}" target="_blank" rel="noopener" title="${esc(v.fileName)}">${ICON.file} Buka PDF</a>`
+    : `<span class="pill mute">PDF belum ada</span>`;
+  return `<td class="sk">${nomor}${meta}<div class="pdf">${pdf}</div></td>`;
+}
+function dueRow(lb,d){
+  if(!d) return `<div class="row"><span class="lb">${lb}</span><span class="pill mute">Isi TMT</span></div>`;
+  return `<div class="row"><span class="lb">${lb}</span><span class="dt">${fmt(d.date)}</span><span class="pill ${d.cls}">${d.label}</span></div>`;
+}
+function renderTable(){
+  const wrap = $('#tablewrap');
+  if(state.error){
+    wrap.innerHTML = `<div class="state"><h2>Data belum bisa dimuat</h2><p>${state.error==='timeout'
+      ? 'Koneksi ke penyimpanan data terlalu lama. Muat ulang halaman, lalu pastikan Anda sudah masuk ke akun Claude.'
+      : 'Anda belum punya akses ke data arsip ini. Minta pemilik arsip untuk membagikan tautan dengan akses yang sesuai.'}</p></div>`;
+    return;
+  }
+  if(!state.loaded){
+    wrap.innerHTML = `<div class="state" style="display:grid;gap:14px;padding:28px 20px">${'<div class="skel"></div>'.repeat(5)}</div>`;
+    return;
+  }
+  if(!state.rows.length){
+    wrap.innerHTML = `<div class="state"><h2>Belum ada data pegawai</h2>
+      <p>Tambahkan pegawai satu per satu, atau impor dari file Excel dengan kolom NO, NAMA PEGAWAI, NIP, serta nomor, tanggal, dan TMT untuk SK Pangkat dan SK Berkala.</p>
+      ${state.canWrite ? `<div class="btns"><button class="btn primary" data-act="add">Tambah pegawai</button><button class="btn" data-act="import">Impor dari Excel</button></div>` : ''}</div>`;
+    return;
+  }
+  const rows = filtered();
+  if(!rows.length){
+    wrap.innerHTML = `<div class="state"><h2>Tidak ada hasil</h2><p>Tidak ada pegawai yang cocok dengan pencarian atau filter ini.</p></div>`;
+    return;
+  }
+  wrap.innerHTML = `<table><thead><tr><th>No</th><th>Pegawai</th><th>SK Pangkat</th><th>SK Berkala</th><th>Jadwal berikutnya</th>${state.canWrite?'<th><span class="sr" style="position:absolute;left:-9999px">Aksi</span></th>':''}</tr></thead><tbody>${
+    rows.map(r=>{ const d = dues(r); return `<tr>
+      <td class="no">${r._no}</td>
+      <td><div class="nm">${esc(r.nama)}</div><div class="nip">${esc(r.nip)||'NIP belum diisi'}</div></td>
+      ${skCell(r,'pangkat')}${skCell(r,'berkala')}
+      <td><div class="due">${dueRow('KP',d.kp)}${dueRow('KGB',d.kgb)}</div></td>
+      ${state.canWrite?`<td><div class="acts"><button class="ib" data-act="edit" data-id="${esc(r.id)}" aria-label="Ubah ${esc(r.nama)}" title="Ubah">${ICON.edit}</button><button class="ib del" data-act="del" data-id="${esc(r.id)}" aria-label="Hapus ${esc(r.nama)}" title="Hapus">${ICON.del}</button></div></td>`:''}
+    </tr>`; }).join('')}</tbody></table>`;
+}
+function renderBanner(){
+  let h = '';
+  if(!state.db && state.loaded===false && state.error==='nodb') h = '';
+  if(!state.canWrite) h = `<div class="banner info">Anda hanya bisa melihat data. Untuk menambah atau mengubah pegawai, minta akses Contributor atau Editor kepada pemilik arsip.</div>`;
+  $('#banner').innerHTML = h;
+  document.querySelectorAll('#btn-add,#btn-import').forEach(b => b.hidden = !state.canWrite);
+}
+function render(){ renderStats(); renderChips(); renderTable(); renderBanner(); }
+
+/* ---------- modal ---------- */
+function openModal(html, small){
+  $('#modal').innerHTML = `<div class="ov" data-close="1"><div class="panel ${small?'sm':''}" role="dialog" aria-modal="true">${html}</div></div>`;
+  const f = $('#modal').querySelector('input:not([type=file]),button'); if(f) f.focus();
+}
+function closeModal(){ if(state.busy) return; $('#modal').innerHTML = ''; form = null; }
+
+let form = null;
+function skFields(k,title,v){
+  return `<fieldset class="grp"><legend>${title}</legend>
+    <div class="f" style="grid-column:1/-1"><label for="${k}-nomor">Nomor SK</label><input id="${k}-nomor" value="${esc(v.nomor)}" autocomplete="off"></div>
+    <div class="f"><label for="${k}-tanggal">Tanggal SK</label><input type="date" id="${k}-tanggal" value="${esc(v.tanggal)}"></div>
+    <div class="f"><label for="${k}-tmt">TMT SK</label><input type="date" id="${k}-tmt" value="${esc(v.tmt)}"></div>
+    <div class="f" style="grid-column:1/-1"><label for="${k}-file">File PDF</label>
+      <div class="filebox"><span class="fn" id="${k}-fname"></span>
+        <input type="file" id="${k}-file" accept="application/pdf,.pdf" ${state.assets?'':'disabled'}>
+        <button type="button" class="link" id="${k}-clear" data-act="clearfile" data-k="${k}" hidden>Hapus file</button></div>
+      ${state.assets?'':'<span class="hint">Unggah PDF hanya tersedia untuk Editor arsip.</span>'}</div>
+  </fieldset>`;
+}
+function fileLabel(k){
+  const f = form.files[k], el = $(`#${k}-fname`), clr = $(`#${k}-clear`);
+  if(!el) return;
+  let txt = 'Belum ada file', has = false;
+  if(f.newFile){ txt = `${f.newFile.name} (akan diunggah)`; has = true; }
+  else if(f.remove){ txt = 'File akan dihapus saat disimpan'; }
+  else if(f.fileId){ txt = f.fileName || 'File PDF tersimpan'; has = true; }
+  el.textContent = txt; clr.hidden = !has;
+}
+function openForm(id){
+  const r = id ? state.rows.find(x=>x.id===id) : null;
+  form = {id: id||null, files:{}};
+  KINDS.forEach(([k])=>{ const v = sk(r||{},k); form.files[k] = {fileId:v.fileId, fileName:v.fileName, newFile:null, remove:false}; });
+  openModal(`
+    <div class="ph"><h2>${r?'Ubah data pegawai':'Tambah pegawai'}</h2><p>Isi data SK sesuai dokumen. Kolom yang belum ada bisa dilengkapi nanti.</p></div>
+    <form id="pform" class="pb" novalidate>
+      <div class="grid2">
+        <div class="f"><label for="f-nama">Nama pegawai</label><input id="f-nama" value="${esc(r?.nama)}" autocomplete="off" required></div>
+        <div class="f"><label for="f-nip">NIP</label><input id="f-nip" value="${esc(r?.nip)}" inputmode="numeric" autocomplete="off" placeholder="18 digit"></div>
+      </div>
+      ${KINDS.map(([k,t])=>skFields(k,t,sk(r||{},k))).join('')}
+    </form>
+    <div class="pf"><span class="msg" id="f-msg" role="alert"></span>
+      <button class="btn" type="button" data-act="close">Batal</button>
+      <button class="btn primary" type="button" data-act="save" id="f-save">Simpan</button></div>`);
+  KINDS.forEach(([k])=>{
+    fileLabel(k);
+    $(`#${k}-file`).addEventListener('change', e=>{
+      const f = e.target.files[0]; if(!f) return;
+      if(!(f.type==='application/pdf' || /\.pdf$/i.test(f.name))){ $('#f-msg').textContent = 'File harus berformat PDF.'; e.target.value=''; return; }
+      if(f.size > 20*1024*1024){ $('#f-msg').textContent = 'Ukuran PDF maksimal 20 MB.'; e.target.value=''; return; }
+      $('#f-msg').textContent = '';
+      form.files[k].newFile = f; form.files[k].remove = false; fileLabel(k);
+    });
+  });
+  $('#pform').addEventListener('submit', e=>{ e.preventDefault(); save(); });
+}
+const val = id => ($(id).value||'').trim();
+
+async function save(){
+  if(state.busy) return;
+  const msg = $('#f-msg'); msg.textContent = '';
+  const nama = val('#f-nama'), nip = val('#f-nip').replace(/\s+/g,'');
+  if(!nama){ msg.textContent = 'Nama pegawai wajib diisi.'; $('#f-nama').focus(); return; }
+  if(nip && !/^\d{18}$/.test(nip)){ msg.textContent = 'NIP harus 18 digit angka, atau kosongkan jika belum ada.'; $('#f-nip').focus(); return; }
+  if(nip && state.rows.some(r=>r.nip===nip && r.id!==form.id)){ msg.textContent = 'NIP ini sudah terdaftar atas pegawai lain.'; return; }
+  const old = form.id ? state.rows.find(x=>x.id===form.id) : null;
+  state.busy = true; $('#f-save').disabled = true; $('#f-save').textContent = 'Menyimpan…';
+  const toDelete = [];
+  try{
+    const data = { nama, nip, urut: old?.urut ?? (state.rows.reduce((m,r)=>Math.max(m,r.urut||0),0)+1), updatedAt:new Date().toISOString() };
+    for(const [k] of KINDS){
+      const f = form.files[k]; let fileId = f.fileId, fileName = f.fileName;
+      if(f.newFile){
+        const up = await state.assets.upload(f.newFile, {type:'application/pdf'});
+        if(fileId) toDelete.push(fileId);
+        fileId = up.id; fileName = f.newFile.name;
+      } else if(f.remove){ if(fileId) toDelete.push(fileId); fileId = ''; fileName = ''; }
+      data[k] = {nomor:val(`#${k}-nomor`), tanggal:val(`#${k}-tanggal`), tmt:val(`#${k}-tmt`), fileId, fileName};
+    }
+    const ref = form.id ? state.db.doc('pegawai/'+form.id) : state.db.collection('pegawai').doc();
+    await ref.set(data);
+    for(const id of toDelete){ try{ await state.assets.delete(id); }catch(e){} }
+    state.busy = false; closeModal(); toast(old ? 'Perubahan disimpan' : 'Pegawai ditambahkan');
+  }catch(e){
+    state.busy = false; $('#f-save').disabled = false; $('#f-save').textContent = 'Simpan';
+    msg.textContent = e && e.code==='quota_exceeded' ? 'Penyimpanan penuh. Hapus data atau file yang tidak dipakai.'
+      : e && e.code==='invalid_argument' ? 'Anda tidak punya izin untuk mengubah data.' : 'Gagal menyimpan. Periksa koneksi lalu coba lagi.';
+  }
+}
+
+/* delete */
+function askDelete(id){
+  const r = state.rows.find(x=>x.id===id); if(!r) return;
+  openModal(`<div class="ph"><h2>Hapus data pegawai?</h2><p>${esc(r.nama)} beserta file PDF SK-nya akan dihapus permanen.</p></div>
+    <div class="pf"><span class="msg" id="f-msg"></span><button class="btn" data-act="close">Batal</button><button class="btn danger" data-act="confirmdel" data-id="${esc(id)}">Hapus</button></div>`, true);
+}
+async function doDelete(id){
+  const r = state.rows.find(x=>x.id===id); if(!r || state.busy) return;
+  state.busy = true;
+  try{
+    await state.db.doc('pegawai/'+id).delete();
+    if(state.assets) for(const [k] of KINDS){ const fid = sk(r,k).fileId; if(fid){ try{ await state.assets.delete(fid); }catch(e){} } }
+    state.busy = false; closeModal(); toast('Data pegawai dihapus');
+  }catch(e){ state.busy = false; const m = $('#f-msg'); if(m) m.textContent = 'Gagal menghapus. Coba lagi.'; }
+}
+
+/* ---------- import / export ---------- */
+const HEAD = ['NO','NAMA PEGAWAI','NIP','NOMOR SK PANGKAT','TANGGAL SK PANGKAT','TMT SK PANGKAT','FILE PDF SK PANGKAT','NOMOR SK BERKALA','TANGGAL SK BERKALA','TMT SK BERKALA','FILE PDF SK BERKALA'];
+const norm = s => String(s??'').replace(/\s+/g,' ').trim().toUpperCase();
+
+async function readImport(file){
+  if(!window.XLSX){ toast('Pustaka Excel belum termuat. Muat ulang halaman.'); return; }
+  try{
+    const wb = XLSX.read(await file.arrayBuffer(), {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const raw = XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+    const txt = XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});
+    const hi = raw.findIndex(r => r.some(c => norm(c)==='NAMA PEGAWAI'));
+    if(hi<0){ toast('Kolom "NAMA PEGAWAI" tidak ditemukan di baris judul.'); return; }
+    const col = {}; raw[hi].forEach((c,i)=>{ col[norm(c)] = i; });
+    const g = (rowR,rowT,name,asDate) => { const i = col[name]; if(i==null) return ''; return asDate ? parseDate(rowR[i] !== '' ? rowR[i] : rowT[i]) : String(rowT[i]??'').trim(); };
+    const items = [];
+    for(let i=hi+1;i<raw.length;i++){
+      const R = raw[i], T = txt[i] || [];
+      const nama = g(R,T,'NAMA PEGAWAI'); if(!nama) continue;
+      items.push({ nama, nip:g(R,T,'NIP').replace(/\s+/g,''),
+        pangkat:{nomor:g(R,T,'NOMOR SK PANGKAT'),tanggal:g(R,T,'TANGGAL SK PANGKAT',1),tmt:g(R,T,'TMT SK PANGKAT',1),fileId:'',fileName:''},
+        berkala:{nomor:g(R,T,'NOMOR SK BERKALA'),tanggal:g(R,T,'TANGGAL SK BERKALA',1),tmt:g(R,T,'TMT SK BERKALA',1),fileId:'',fileName:''} });
+    }
+    const have = new Set(state.rows.map(r=>r.nip).filter(Boolean));
+    const fresh = items.filter(x => !(x.nip && have.has(x.nip)));
+    if(!items.length){ toast('Tidak ada baris pegawai yang bisa dibaca.'); return; }
+    form = {importItems:fresh};
+    openModal(`<div class="ph"><h2>Impor dari Excel</h2><p>${items.length} baris terbaca dari ${esc(file.name)}.</p></div>
+      <div class="pb"><div>${fresh.length} pegawai akan ditambahkan${items.length-fresh.length?`, ${items.length-fresh.length} dilewati karena NIP sudah terdaftar`:''}.</div>
+      <div class="hint" style="color:var(--ink-2);font-size:12.5px">File PDF tidak ikut terimpor. Unggah PDF tiap pegawai lewat tombol ubah setelah impor selesai.</div>
+      <div class="prog" id="prog" hidden><i></i></div></div>
+      <div class="pf"><span class="msg" id="f-msg"></span><button class="btn" data-act="close">Batal</button>
+      <button class="btn primary" data-act="doimport" ${fresh.length?'':'disabled'}>Impor ${fresh.length} data</button></div>`, true);
+  }catch(e){ toast('File tidak bisa dibaca. Pastikan formatnya Excel atau CSV.'); }
+}
+async function doImport(){
+  const items = form && form.importItems; if(!items || state.busy) return;
+  state.busy = true; const bar = $('#prog'); bar.hidden = false;
+  let base = state.rows.reduce((m,r)=>Math.max(m,r.urut||0),0), done = 0;
+  try{
+    for(const it of items){
+      await state.db.collection('pegawai').doc().set({...it, urut:++base, updatedAt:new Date().toISOString()});
+      done++; bar.firstElementChild.style.width = Math.round(done/items.length*100)+'%';
+    }
+    state.busy = false; closeModal(); toast(`${done} pegawai berhasil diimpor`);
+  }catch(e){
+    state.busy = false; const m = $('#f-msg'); if(m) m.textContent = `Berhenti di data ke-${done+1}. ${done} data sudah tersimpan.`;
+  }
+}
+async function doExport(){
+  if(!window.XLSX || !state.dl){ toast('Fitur unduh belum tersedia di tampilan ini.'); return; }
+  const aoa = [HEAD];
+  sorted().forEach((r,i)=>{ const p = sk(r,'pangkat'), b = sk(r,'berkala');
+    aoa.push([i+1, r.nama, r.nip||'', p.nomor, fmtNum(p.tanggal), fmtNum(p.tmt), p.fileName||'', b.nomor, fmtNum(b.tanggal), fmtNum(b.tmt), b.fileName||'']); });
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  ws['!cols'] = [6,32,22,30,16,16,26,30,16,16,26].map(w=>({wch:w}));
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Data SK Pegawai');
+  const buf = XLSX.write(wb,{type:'array',bookType:'xlsx'});
+  const t = today();
+  try{ await state.dl.save({filename:`DATA_SK_PEGAWAI_SDN_3_BNU_${iso(t.getFullYear(),t.getMonth()+1,t.getDate())}.xlsx`, data:buf}); toast('File Excel siap disimpan'); }
+  catch(e){ toast('Unduhan dibatalkan.'); }
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e=>{
+  const ov = e.target.closest('[data-close]'); if(ov && e.target===ov){ closeModal(); return; }
+  const el = e.target.closest('[data-act]'); if(!el) return;
+  const a = el.dataset.act;
+  if(a==='add') openForm(null);
+  else if(a==='edit') openForm(el.dataset.id);
+  else if(a==='del') askDelete(el.dataset.id);
+  else if(a==='confirmdel') doDelete(el.dataset.id);
+  else if(a==='close') closeModal();
+  else if(a==='save') save();
+  else if(a==='import') $('#importfile').click();
+  else if(a==='doimport') doImport();
+  else if(a==='export') doExport();
+  else if(a==='filter'){ state.filter = el.dataset.v; renderChips(); renderTable(); }
+  else if(a==='clearfile'){ const f = form.files[el.dataset.k]; f.newFile = null; f.remove = !!f.fileId; $(`#${el.dataset.k}-file`).value=''; fileLabel(el.dataset.k); }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+$('#q').addEventListener('input', e=>{ state.q = e.target.value; renderTable(); });
+$('#importfile').addEventListener('change', e=>{ const f = e.target.files[0]; e.target.value=''; if(f) readImport(f); });
+
+/* ---------- boot ---------- */
+const use = n => (window.claude && window.claude.use) ? window.claude.use(n).catch(()=>null) : Promise.resolve(null);
+(async function init(){
+  const t = today(); $('#asof').textContent = `Data per ${pad(t.getDate())} ${MON[t.getMonth()]} ${t.getFullYear()}`;
+  render();
+  const timer = setTimeout(()=>{ if(!state.loaded && !state.error){ state.error = 'timeout'; render(); } }, 10000);
+  const [db,user,assets,dl] = await Promise.all([use('db'),use('user'),use('assets'),use('downloads')]);
+  state.assets = assets; state.dl = dl;
+  if(!db){ clearTimeout(timer); state.error = 'noaccess'; render(); return; }
+  state.db = db;
+  try{ const c = user ? await user.can('data.write') : null; state.canWrite = c !== false; }catch(e){}
+  render();
+  db.collection('pegawai').onSnapshot(snap=>{
+    clearTimeout(timer);
+    state.rows = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    state.loaded = true; state.error = null; render();
+  }, err=>{ clearTimeout(timer); state.error = 'noaccess'; render(); });
+})();
+})();
+</script>
+
+</body></html>
